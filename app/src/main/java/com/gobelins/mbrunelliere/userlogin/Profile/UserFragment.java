@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.firebase.client.AuthData;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.gobelins.mbrunelliere.userlogin.R;
 
 import butterknife.Bind;
@@ -25,6 +28,7 @@ import butterknife.ButterKnife;
 public class UserFragment extends Fragment {
 
     private UserListener mListener;
+    private Firebase myFirebaseRef;
 
     public UserFragment() {
         // Required empty public constructor
@@ -41,9 +45,11 @@ public class UserFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user, container, false);
         ButterKnife.bind(this, view);
+        myFirebaseRef = new Firebase("https://workshopandroid.firebaseio.com");
+        AuthData authData = myFirebaseRef.getAuth();
 
-        mProfileName.setText("test");
-        mProfileMail.setText("test");
+        /*mProfileName.setText(authData.getProviderData().get("name").toString());*/
+        mProfileMail.setText(authData.getProviderData().get("email").toString());
 
         return view;
     }

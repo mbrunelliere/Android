@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
     private static final String TAG = "MainActivity";
     private Firebase myFirebaseRef;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +94,9 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
                 // there was an error
             }
         });
+        //Start UserActivity
+        Intent i = new Intent(MainActivity.this, UserActivity.class);
+        startActivity(i);
     }
 
     @Override
@@ -117,9 +121,9 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
                 // there was an error
             }
         });
-
+        //Start UserActivity
         Intent i = new Intent(MainActivity.this, UserActivity.class);
-        startActivity(i); // brings up the second activity
+        startActivity(i);
     }
 
 
