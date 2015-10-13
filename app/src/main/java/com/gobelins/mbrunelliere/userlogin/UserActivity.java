@@ -14,9 +14,7 @@ public class UserActivity extends AppCompatActivity implements UserFragment.User
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
-        String username = getIntent().getStringExtra("username");
-        String email = getIntent().getStringExtra("email");
-        int password = getIntent().getIntExtra("password", 0);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -26,7 +24,7 @@ public class UserActivity extends AppCompatActivity implements UserFragment.User
         //instantiate Fragment
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.mainContainer, new UserFragment())
+                .add(R.id.mainWrapper2, new UserFragment())
                 .commit();
     }
 
