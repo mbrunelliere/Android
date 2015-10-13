@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">UserLogin</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login.name">Votre nom</string>
+    <string name="login.password">Votre mot de passe</string>
+    <string name="login.button">Connexion</string>
+
+    <string name="signin.info">Renseignez les champs suivants pour vous inscrire</string>
+    <string name="signin.name">Votre nom</string>
+    <string name="signin.mail">Votre email</string>
+    <string name="signin.password">Votre mot de passe</string>
+    <string name="signin.button">Inscription</string>
+
+    <string name="menu.main.register">S\'enregistrer</string>
+    <string name="menu.main.login">Se connecter</string>
+    <string name="login.info">Veuillez vous connecter</string>
+</resources>
