@@ -1,5 +1,6 @@
 package com.gobelins.mbrunelliere.userlogin;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -8,7 +9,7 @@ import com.firebase.client.Firebase;
 import com.gobelins.mbrunelliere.userlogin.Profile.UserFragment;
 
 
-public class UserActivity extends AppCompatActivity implements UserFragment.UserListener {
+public class UserActivity extends AppCompatActivity implements UserFragment.userListener {
 
     private Firebase myFirebaseRef;
 
@@ -33,4 +34,10 @@ public class UserActivity extends AppCompatActivity implements UserFragment.User
     }
 
 
+    @Override
+    public void onLogoutClicked() {
+        myFirebaseRef.unauth();
+        Intent i = new Intent(UserActivity.this, MainActivity.class);
+        startActivity(i);
+    }
 }

@@ -22,7 +22,7 @@ import butterknife.OnClick;
  */
 public class RegisterFragment extends Fragment {
 
-    private static final String TAG  = "RegisterFrament";
+    private static final String TAG  = "RegisterFragment";
     private RegisterListener registerListener;
 
     @Bind(R.id.signinName)

@@ -1,11 +1,13 @@
 package com.gobelins.mbrunelliere.userlogin.Profile;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,20 +16,24 @@ import android.widget.TextView;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.gobelins.mbrunelliere.userlogin.MainActivity;
 import com.gobelins.mbrunelliere.userlogin.R;
+import com.gobelins.mbrunelliere.userlogin.UserActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link UserFragment.UserListener} interface
+ * {@link UserFragment.userListener} interface
  * to handle interaction events.
  */
 public class UserFragment extends Fragment {
 
-    private UserListener mListener;
+    private userListener mListener;
+    private static final String TAG  = "UserFragment";
     private Firebase myFirebaseRef;
 
     public UserFragment() {
@@ -59,7 +65,7 @@ public class UserFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (UserListener) activity;
+            mListener = (userListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -72,6 +78,12 @@ public class UserFragment extends Fragment {
         mListener = null;
     }
 
+    @OnClick(R.id.logOutButton)
+    void onClick(View v) {
+        myFirebaseRef.unauth();
+        mListener.onLogoutClicked();
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -82,8 +94,8 @@ public class UserFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface UserListener {
-
+    public interface userListener {
+        void onLogoutClicked();
     }
 
 }
