@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Firebase.setAndroidContext(this);
         myFirebaseRef = new Firebase("https://workshopandroid.firebaseio.com");
         setContentView(R.layout.activity_main);
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
 
         LoginFragment loginFragment = new LoginFragment();
         RegisterFragment registerFragment = new RegisterFragment();
+
+        setTitle("Bienvenue");
 
         //instantiate Fragment
         getSupportFragmentManager()

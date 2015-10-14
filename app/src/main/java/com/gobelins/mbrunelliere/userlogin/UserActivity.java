@@ -26,6 +26,8 @@ public class UserActivity extends AppCompatActivity implements UserFragment.user
 
         UserFragment userFragment = new UserFragment();
 
+        setTitle("Profil utilisateur");
+
         //instantiate Fragment
         getSupportFragmentManager()
                 .beginTransaction()
