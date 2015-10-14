@@ -62,6 +62,12 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
                     .replace(R.id.mainContainer, new RegisterFragment())
                     .commit();
             return true;
+        }else if (item.getItemId() == R.id.menuMainProfileItem) {
+            //profile clicked
+            //Start UserActivity
+            Intent userActivity = new Intent(MainActivity.this, UserActivity.class);
+            startActivity(userActivity);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -87,9 +93,8 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
                             }
                         })
                         .show();
-                //Start UserActivity
-                Intent i = new Intent(MainActivity.this, UserActivity.class);
-                startActivity(i);
+                Intent chatActivity = new Intent(MainActivity.this, ChatActivity.class);
+                startActivity(chatActivity);
             }
 
             @Override
@@ -115,9 +120,10 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
                             }
                         })
                         .show();
-                //Start UserActivity
-                Intent i = new Intent(MainActivity.this, UserActivity.class);
-                startActivity(i);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.mainContainer, new LoginFragment())
+                        .commit();
             }
 
             @Override

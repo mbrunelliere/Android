@@ -16,4 +16,7 @@
     <string name="menu.main.register">S\'enregistrer</string>
     <string name="menu.main.login">Se connecter</string>
     <string name="login.info">Veuillez vous connecter</string>
+    <string name="menu.main.profile">Profil</string>
+    <string name="title_activity_chat">ChatActivity</string>
+    <string name="action_settings">Settings</string>
 </resources>
