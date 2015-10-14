@@ -5,8 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.firebase.client.ChildEventListener;
@@ -180,5 +178,10 @@ public abstract class FirebaseListAdapter<T> extends RecyclerView.Adapter<Fireba
             authorTextView = (TextView) itemView.findViewById(R.id.author);
             messageTextView = (TextView) itemView.findViewById(R.id.message);
         }
+    }
+
+    // Pass in the message array into the constructor
+    public FirebaseListAdapter() {
+        mModels = null;
     }
 }
