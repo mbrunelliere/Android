@@ -14,6 +14,7 @@ import android.view.View;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.gobelins.mbrunelliere.userlogin.Profile.User;
 import com.gobelins.mbrunelliere.userlogin.User.LoginFragment;
 import com.gobelins.mbrunelliere.userlogin.User.RegisterFragment;
 
@@ -106,10 +107,10 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
     }
 
     @Override
-    public void onRegisterClicked(CharSequence nameText, CharSequence emailText, CharSequence passwordText) {
+    public void onRegisterClicked(User user) {
         Log.d(TAG, "onLoginClicked in RegisterActivity ");
 
-        myFirebaseRef.createUser(emailText.toString(), passwordText.toString(), new Firebase.ValueResultHandler<Map<String, Object>>() {
+        myFirebaseRef.createUser(user.getEmail(), user.getPassword(), new Firebase.ValueResultHandler<Map<String, Object>>() {
             @Override
             public void onSuccess(Map<String, Object> result) {
                 System.out.println("Successfully created user account with uid: " + result.get("uid"));

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.gobelins.mbrunelliere.userlogin.Profile.User;
 import com.gobelins.mbrunelliere.userlogin.R;
 
 import butterknife.Bind;
@@ -60,12 +61,13 @@ public class RegisterFragment extends Fragment {
 
     @OnClick(R.id.registerButton)
     void onClick(View v) {
-        Log.d(TAG, "onClickListerner");
-        registerListener.onRegisterClicked(mRegisterName.getText(), mRegisterEmail.getText(), mRegisterPassword.getText());
+        Log.d(TAG, "onClickListener");
+        User user = new User(mRegisterName.getText().toString(), mRegisterEmail.getText().toString(), mRegisterPassword.getText().toString());
+        registerListener.onRegisterClicked(user);
     }
 
     public interface RegisterListener {
-        void onRegisterClicked(CharSequence nameText, CharSequence emailText, CharSequence passwordText);
+        void onRegisterClicked(User user);
     }
 
 
