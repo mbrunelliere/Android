@@ -29,7 +29,7 @@ public class UserActivity extends AppCompatActivity implements UserFragment.user
         //instantiate Fragment
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.mainWrapper2, new UserFragment())
+                .add(R.id.mainContainer, new UserFragment())
                 .commit();
     }
 
