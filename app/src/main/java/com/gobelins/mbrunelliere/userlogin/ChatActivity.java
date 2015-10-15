@@ -1,37 +1,34 @@
 package com.gobelins.mbrunelliere.userlogin;
 
-import android.database.DataSetObserver;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.firebase.client.AuthData;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.ValueEventListener;
-import com.gobelins.mbrunelliere.userlogin.Chat.ChatListAdapter;
-import com.gobelins.mbrunelliere.userlogin.Chat.Message;
 
+import com.firebase.client.AuthData;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.ui.FirebaseRecyclerViewAdapter;
+import com.gobelins.mbrunelliere.userlogin.Chat.Message;
+import com.gobelins.mbrunelliere.userlogin.Chat.MessageHolder;
 
 
 public class ChatActivity extends AppCompatActivity {
 
-    private static final String FIREBASE_URL = "https://workshopandroid.firebaseio.com";
-
-    private String mUsername;
-    private Firebase mFirebaseRef;
-    private ValueEventListener mConnectedListener;
-    private ChatListAdapter adapter;
-    private Firebase myFirebaseRef;
+    private static final String TAG = "ChatActivity";
+    private FirebaseRecyclerViewAdapter<Message, MessageHolder> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,64 +40,67 @@ public class ChatActivity extends AppCompatActivity {
 
         setTitle("Messagerie");
 
-        // Make sure we have a mUsername
-        setupUsername();
+        Firebase.setAndroidContext(this);
+        final Firebase ref = new Firebase("https://workshopandroid.firebaseio.com").child("messages");
+        final AuthData authData = ref.getAuth();
 
-        // Setup our Firebase mFirebaseRef
-        mFirebaseRef = new Firebase(FIREBASE_URL).child("chat");
+        final String name = authData.getProviderData().get("email").toString();
+        final Button sendButton = (Button) findViewById(R.id.chatSendButton);
+        final EditText messageEdit = (EditText) findViewById(R.id.chatMessageInput);
+        final RecyclerView messages = (RecyclerView) findViewById(R.id.rvMessages);
 
-        // Setup our input methods. Enter key on the keyboard or pushing the send button
-        EditText inputText = (EditText) findViewById(R.id.chatMessageInput);
-        inputText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        messages.setHasFixedSize(true);
+        messages.setLayoutManager(new LinearLayoutManager(this));
+
+        messageEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 if (actionId == EditorInfo.IME_NULL && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                    sendMessage();
+                    /*sendMessage();*/
                 }
                 return true;
             }
         });
-
-        findViewById(R.id.chatSendButton).setOnClickListener(new View.OnClickListener() {
+        sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                sendMessage();
+            public void onClick(View v) {
+                Message message = new Message(name, messageEdit.getText().toString());
+                ref.push().setValue(message, new Firebase.CompletionListener() {
+                    @Override
+                    public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                        if (firebaseError != null) {
+                            Log.e("FirebaseUI.chat", firebaseError.toString());
+                        }
+                    }
+                });
+                messageEdit.setText("");
             }
         });
 
-        // Lookup the recyclerview in activity layout
-        RecyclerView rvMessages = (RecyclerView) findViewById(R.id.rvMessages);
-        // Create adapter passing in the sample user data
-        adapter = new ChatListAdapter(mFirebaseRef.limit(50), this, R.layout.item_chat, mUsername);
-        // Attach the adapter to the recyclerview to populate items
-        rvMessages.setAdapter(adapter);
-        // Set layout manager to position the items
-        rvMessages.setLayoutManager(new LinearLayoutManager(this));
-        // That's all!
+        adapter = new FirebaseRecyclerViewAdapter<Message, MessageHolder>(Message.class, R.layout.item_chat, MessageHolder.class, ref) {
+             @Override
+             public void populateViewHolder(MessageHolder messageView, Message message) {
+                 messageView.textView.setText(message.getMessage());
+                 messageView.textView.setPadding(10, 0, 10, 0);
+                 messageView.nameView.setText(message.getAuthor());
+                 messageView.nameView.setPadding(10, 0, 10, 15);
+                 if (message.getAuthor().equals(name)) {
+                     messageView.textView.setGravity(Gravity.END);
+                     messageView.nameView.setGravity(Gravity.END);
+                     messageView.nameView.setTextColor(Color.parseColor("#8BC34A"));
+                 } else {
+                     messageView.nameView.setTextColor(Color.parseColor("#00BCD4"));
+                 }
+             }
+         };
+
+        messages.setAdapter(adapter);
+
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        mFirebaseRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
+    protected void onDestroy() {
+        super.onDestroy();
         adapter.cleanup();
-    }
-
-    private void setupUsername() {
-        myFirebaseRef = new Firebase("https://workshopandroid.firebaseio.com");
-        AuthData authData = myFirebaseRef.getAuth();
-        mUsername = authData.getProviderData().get("email").toString();
-    }
-
-    private void sendMessage() {
-        EditText inputText = (EditText) findViewById(R.id.chatMessageInput);
-        String input = inputText.getText().toString();
-        if (!input.equals("")) {
-            // Create our 'model', a Chat object
-            Message userMessage = new Message(mUsername, input);
-            // Create a new, auto-generated child of that chat location, and save our chat data there
-            mFirebaseRef.push().setValue(userMessage);
-            inputText.setText("");
-        }
     }
 }

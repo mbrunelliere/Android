@@ -30,15 +30,4 @@ public class Message {
     }
 
 
-    private static int lastMessageId = 0;
-
-    public static List<Message> createMessagesList(int numContacts) {
-        List<Message> messages = new ArrayList<Message>();
-
-        for (int i = 1; i <= numContacts; i++) {
-            messages.add(new Message("Person " + ++lastMessageId + " : ", "Message "));
-        }
-
-        return messages;
-    }
 }
