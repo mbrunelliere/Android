@@ -26,17 +26,19 @@ import com.firebase.client.FirebaseError;
 import com.firebase.ui.FirebaseRecyclerViewAdapter;
 import com.gobelins.mbrunelliere.userlogin.Chat.Message;
 import com.gobelins.mbrunelliere.userlogin.Chat.MessageHolder;
-import com.gobelins.mbrunelliere.userlogin.User.LoginFragment;
-import com.gobelins.mbrunelliere.userlogin.User.RegisterFragment;
 
 
-public class ChatActivity extends AppCompatActivity {
+
+public class ChatActivity extends AppCompatActivity  {
 
     private static final String TAG = "ChatActivity";
     private FirebaseRecyclerViewAdapter<Message, MessageHolder> adapter;
 
     private String passwordSession;
     private String emailSession;
+    private LinearLayoutManager linearLayoutManager;
+    private int oldNbrItems;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +63,7 @@ public class ChatActivity extends AppCompatActivity {
         final RecyclerView messages = (RecyclerView) findViewById(R.id.rvMessages);
 
         messages.setHasFixedSize(true);
-        messages.setLayoutManager(new LinearLayoutManager(this));
+        messages.setLayoutManager(linearLayoutManager = new LinearLayoutManager(this));
 
         messageEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -92,6 +94,7 @@ public class ChatActivity extends AppCompatActivity {
              @Override
              public void populateViewHolder(MessageHolder messageView, Message message) {
 
+                 oldNbrItems = adapter.getItemCount() - 1;
                  messageView.textView.setText(message.getMessage());
                  messageView.textView.setPadding(10, 0, 10, 0);
                  messageView.nameView.setText(message.getAuthor() + " : ");
@@ -104,21 +107,31 @@ public class ChatActivity extends AppCompatActivity {
                  } else {
                      messageView.nameView.setTextColor(Color.parseColor("#00BCD4"));
                  }
+                // messages.smoothScrollToPosition(adapter.getItemCount() - 1);
              }
 
         };
 
         messages.setAdapter(adapter);
-        //messages.scrollToPosition(adapter.getItemCount() - 1);
-
+        /*messages.setRecyclerListener(new RecyclerView.RecyclerListener() {
+            @Override
+            public void onViewRecycled(RecyclerView.ViewHolder holder) {
+                if( oldNbrItems == adapter.getItemCount() - 1 ) {
+                    messages.smoothScrollToPosition(adapter.getItemCount() - 1);
+                }
+            }
+        });
+        */
 
     }
+
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         adapter.cleanup();
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -149,4 +162,6 @@ public class ChatActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_chat, menu);
         return true;
     }
+
 }
+

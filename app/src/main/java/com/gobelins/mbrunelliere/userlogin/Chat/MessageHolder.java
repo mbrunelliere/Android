@@ -14,9 +14,11 @@ public class MessageHolder extends RecyclerView.ViewHolder {
     public TextView nameView;
     public TextView textView;
 
+
     public MessageHolder(View itemView) {
         super(itemView);
         nameView = (TextView) itemView.findViewById(R.id.author);
         textView = (TextView) itemView.findViewById(R.id.message);
     }
+
 }

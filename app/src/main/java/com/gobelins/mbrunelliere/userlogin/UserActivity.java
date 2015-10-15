@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -61,21 +62,36 @@ public class UserActivity extends AppCompatActivity implements UserFragment.user
 
         Log.d(TAG, "email :" + emailSession + "et password :" + passwordSession);
 
-        myFirebaseRef.changeEmail("marion@gmail.com", newEmail, "marion", new Firebase.ResultHandler() {
+        myFirebaseRef.changeEmail("user2@gmail.com", "user2.1@gmail.com", "user2", new Firebase.ResultHandler() {
             @Override
             public void onSuccess() {
-                Snackbar.make(findViewById(R.id.mainWrapper), "Vos modifications ont été prises en compte", Snackbar.LENGTH_LONG)
-                        .setAction("OK", new View.OnClickListener() {
-                            public void onClick(View v) {
-                                Log.d(TAG, "OK");
-                            }
-                        })
-                        .show();
+                Toast.makeText(UserActivity.this, "Modifications sauvegardées", Toast.LENGTH_LONG).show();
+                Log.d(TAG, "Email changé");
             }
 
             @Override
             public void onError(FirebaseError firebaseError) {
-                Log.d(TAG, "Firebase bug");
+                // error encountered
+                switch (firebaseError.getCode()) {
+                    case FirebaseError.USER_DOES_NOT_EXIST:
+                        Toast.makeText(UserActivity.this, "unknown user", Toast.LENGTH_LONG).show();
+                        break;
+                    case FirebaseError.INVALID_EMAIL:
+                        Toast.makeText(UserActivity.this, "invalid email", Toast.LENGTH_LONG).show();
+                        break;
+                    case FirebaseError.INVALID_PASSWORD:
+                        Toast.makeText(UserActivity.this, "invalid password", Toast.LENGTH_LONG).show();
+                        break;
+                    case FirebaseError.DENIED_BY_USER:
+                        Toast.makeText(UserActivity.this, "USER DENIED", Toast.LENGTH_LONG).show();
+                        break;
+                    case FirebaseError.UNKNOWN_ERROR:
+                        Toast.makeText(UserActivity.this, "UNKNOWN ERROR", Toast.LENGTH_LONG).show();
+                        break;
+                    default:
+                        Toast.makeText(UserActivity.this, "an error occured", Toast.LENGTH_LONG).show();
+                        break;
+                }
             }
         });
 
