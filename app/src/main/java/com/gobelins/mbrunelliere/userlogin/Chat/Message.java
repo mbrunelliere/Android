@@ -9,6 +9,7 @@ import java.util.List;
 public class Message {
     private String author;
     private String message;
+    private String receiver;
 
 
     // Required default constructor for Firebase object mapping
@@ -16,9 +17,14 @@ public class Message {
     private Message() {
     }
 
-    public Message( String author, String message) {
+    public Message( String author, String message, String receiver) {
         this.message = message;
         this.author = author;
+        this.receiver = receiver;
+    }
+
+    public Message( String author, String message) {
+        this(author, message, "all");
     }
 
     public String getMessage() {
@@ -30,4 +36,7 @@ public class Message {
     }
 
 
+    public String getReceiver() {
+        return receiver;
+    }
 }

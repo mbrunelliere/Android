@@ -31,11 +31,11 @@
         android:layout_centerHorizontal="true">
 
         <EditText
-            android:id="@+id/loginName"
+            android:id="@+id/loginMail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/login.name"
+            android:hint="@string/login.mail"
             android:inputType="textPersonName"
             tools:text="Name" />
     </android.support.design.widget.TextInputLayout>

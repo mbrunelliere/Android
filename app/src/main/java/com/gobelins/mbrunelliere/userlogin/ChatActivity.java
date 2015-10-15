@@ -1,5 +1,6 @@
 package com.gobelins.mbrunelliere.userlogin;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import android.view.inputmethod.EditorInfo;
@@ -23,12 +26,17 @@ import com.firebase.client.FirebaseError;
 import com.firebase.ui.FirebaseRecyclerViewAdapter;
 import com.gobelins.mbrunelliere.userlogin.Chat.Message;
 import com.gobelins.mbrunelliere.userlogin.Chat.MessageHolder;
+import com.gobelins.mbrunelliere.userlogin.User.LoginFragment;
+import com.gobelins.mbrunelliere.userlogin.User.RegisterFragment;
 
 
 public class ChatActivity extends AppCompatActivity {
 
     private static final String TAG = "ChatActivity";
     private FirebaseRecyclerViewAdapter<Message, MessageHolder> adapter;
+
+    private String passwordSession;
+    private String emailSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +47,9 @@ public class ChatActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         setTitle("Messagerie");
+
+        passwordSession = getIntent().getStringExtra("passwordSession");
+        emailSession = getIntent().getStringExtra("emailSession");
 
         Firebase.setAndroidContext(this);
         final Firebase ref = new Firebase("https://workshopandroid.firebaseio.com").child("messages");
@@ -80,10 +91,12 @@ public class ChatActivity extends AppCompatActivity {
         adapter = new FirebaseRecyclerViewAdapter<Message, MessageHolder>(Message.class, R.layout.item_chat, MessageHolder.class, ref) {
              @Override
              public void populateViewHolder(MessageHolder messageView, Message message) {
+
                  messageView.textView.setText(message.getMessage());
                  messageView.textView.setPadding(10, 0, 10, 0);
-                 messageView.nameView.setText(message.getAuthor());
+                 messageView.nameView.setText(message.getAuthor() + " : ");
                  messageView.nameView.setPadding(10, 0, 10, 15);
+
                  if (message.getAuthor().equals(name)) {
                      messageView.textView.setGravity(Gravity.END);
                      messageView.nameView.setGravity(Gravity.END);
@@ -92,9 +105,12 @@ public class ChatActivity extends AppCompatActivity {
                      messageView.nameView.setTextColor(Color.parseColor("#00BCD4"));
                  }
              }
-         };
+
+        };
 
         messages.setAdapter(adapter);
+        //messages.scrollToPosition(adapter.getItemCount() - 1);
+
 
     }
 
@@ -102,5 +118,35 @@ public class ChatActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         adapter.cleanup();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_settings) {
+            //login clicked
+            return true;
+        }else if (item.getItemId() == R.id.actions_Profile) {
+            //profile clicked
+            Intent userActivity = new Intent(ChatActivity.this, UserActivity.class);
+            userActivity.putExtra("emailSession",emailSession);
+            userActivity.putExtra("passwordSession",passwordSession);
+            startActivity(userActivity);
+            return true;
+        }else if (item.getItemId() == R.id.actions_Logout) {
+            //logout clicked
+
+            Firebase FirebaseRef = new Firebase("https://workshopandroid.firebaseio.com");
+            FirebaseRef.unauth();
+            Intent i = new Intent(ChatActivity.this, MainActivity.class);
+            startActivity(i);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_chat, menu);
+        return true;
     }
 }

@@ -14,8 +14,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.firebase.client.AuthData;
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.gobelins.mbrunelliere.userlogin.MainActivity;
 import com.gobelins.mbrunelliere.userlogin.R;
 import com.gobelins.mbrunelliere.userlogin.UserActivity;
@@ -33,8 +36,10 @@ import butterknife.OnClick;
 public class UserFragment extends Fragment {
 
     private userListener mListener;
-    private static final String TAG  = "UserFragment";
     private Firebase myFirebaseRef;
+    private Firebase myCurrentUserRef;
+
+    private String emailString;
 
     public UserFragment() {
         // Required empty public constructor
@@ -48,14 +53,31 @@ public class UserFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user, container, false);
         ButterKnife.bind(this, view);
+
         myFirebaseRef = new Firebase("https://workshopandroid.firebaseio.com");
         AuthData authData = myFirebaseRef.getAuth();
 
-        /*mProfileName.setText(authData.getProviderData().get("name").toString());*/
-        mProfileMail.setText(authData.getProviderData().get("email").toString());
+        emailString = authData.getProviderData().get("email").toString();
+        mProfileMail.setText(emailString);
+
+        myCurrentUserRef = myFirebaseRef.child("users/" + authData.getUid());
+        myCurrentUserRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                mProfileName.setText(snapshot.child("name").getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(FirebaseError error) {
+            }
+        });
+
+
+
 
         return view;
     }
@@ -78,10 +100,9 @@ public class UserFragment extends Fragment {
         mListener = null;
     }
 
-    @OnClick(R.id.logOutButton)
+    @OnClick(R.id.saveButton)
     void onClick(View v) {
-        myFirebaseRef.unauth();
-        mListener.onLogoutClicked();
+        mListener.onSaveButtonClicked(myCurrentUserRef, mProfileName.getText().toString(), mProfileMail.getText().toString());
     }
 
     /**
@@ -95,7 +116,7 @@ public class UserFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface userListener {
-        void onLogoutClicked();
+        void onSaveButtonClicked(Firebase userRef, String name, String email);
     }
 
 }

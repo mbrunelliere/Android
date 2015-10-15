@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
     private static final String TAG = "MainActivity";
     private Firebase myFirebaseRef;
 
+    private String passwordSession;
+    private String emailSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,25 +54,12 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.menuMainLoginItem) {
-            //login clicked
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.mainContainer, new LoginFragment())
-                    .commit();
-            return true;
-        }else if (item.getItemId() == R.id.menuMainRegisterItem) {
+        if (item.getItemId() == R.id.menuMainRegisterItem) {
             //register clicked
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.mainContainer, new RegisterFragment())
                     .commit();
-            return true;
-        }else if (item.getItemId() == R.id.menuMainProfileItem) {
-            //profile clicked
-            //Start UserActivity
-            Intent userActivity = new Intent(MainActivity.this, UserActivity.class);
-            startActivity(userActivity);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -85,19 +74,23 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
     @Override
     public void onLoginClicked(CharSequence loginText, CharSequence passwordText) {
         Log.d(TAG, "onLoginClicked in LoginActivity ");
+        passwordSession = passwordText.toString();
+        emailSession = loginText.toString();
 
         myFirebaseRef.authWithPassword(loginText.toString(), passwordText.toString(), new Firebase.AuthResultHandler() {
             @Override
             public void onAuthenticated(AuthData authData) {
                 System.out.println("User ID: " + authData.getUid() + ", Provider: " + authData.getProvider());
                 Snackbar.make(findViewById(R.id.mainWrapper), "Vous êtes connecté", Snackbar.LENGTH_LONG)
-                        .setAction("UNDO", new View.OnClickListener() {
+                        .setAction("OK", new View.OnClickListener() {
                             public void onClick(View v) {
-                                Log.d(TAG, "undo");
+                                Log.d(TAG, "ok");
                             }
                         })
                         .show();
                 Intent chatActivity = new Intent(MainActivity.this, ChatActivity.class);
+                chatActivity.putExtra("emailSession",emailSession);
+                chatActivity.putExtra("passwordSession",passwordSession);
                 startActivity(chatActivity);
             }
 
@@ -112,22 +105,29 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
     @Override
     public void onRegisterClicked(User user) {
         Log.d(TAG, "onLoginClicked in RegisterActivity ");
+        final User currentUser = user;
 
+        //Add User with Firebase Auth
         myFirebaseRef.createUser(user.getEmail(), user.getPassword(), new Firebase.ValueResultHandler<Map<String, Object>>() {
             @Override
             public void onSuccess(Map<String, Object> result) {
                 System.out.println("Successfully created user account with uid: " + result.get("uid"));
                 Snackbar.make(findViewById(R.id.mainWrapper), "Vous êtes inscrit", Snackbar.LENGTH_LONG)
-                        .setAction("UNDO", new View.OnClickListener() {
+                        .setAction("OK", new View.OnClickListener() {
                             public void onClick(View v) {
-                                Log.d(TAG, "undo");
+                                Log.d(TAG, "OK");
                             }
                         })
                         .show();
+                //Add User in Firebase Data
+                Firebase usersRef = myFirebaseRef.child("users/" + result.get("uid"));
+                usersRef.setValue(currentUser);
+                //Change fragment
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.mainContainer, new LoginFragment())
                         .commit();
+
             }
 
             @Override

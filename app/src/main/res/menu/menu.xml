@@ -4,14 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.gobelins.mbrunelliere.userLogin.MainActivity">
     <item
-        android:id="@+id/menuMainLoginItem"
-        android:title="@string/menu.main.login"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/menuMainRegisterItem"
         android:title="@string/menu.main.register" />
-    <item
-        android:id="@+id/menuMainProfileItem"
-        android:orderInCategory="100"
-        android:title="@string/menu.main.profile" />
+
 </menu>

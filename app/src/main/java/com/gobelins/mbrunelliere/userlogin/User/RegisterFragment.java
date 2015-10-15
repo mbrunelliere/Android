@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.firebase.client.Firebase;
 import com.gobelins.mbrunelliere.userlogin.Profile.User;
 import com.gobelins.mbrunelliere.userlogin.R;
 
@@ -63,6 +64,7 @@ public class RegisterFragment extends Fragment {
     void onClick(View v) {
         Log.d(TAG, "onClickListener");
         User user = new User(mRegisterName.getText().toString(), mRegisterEmail.getText().toString(), mRegisterPassword.getText().toString());
+
         registerListener.onRegisterClicked(user);
     }
 
