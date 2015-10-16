@@ -1,27 +1,20 @@
 package com.gobelins.mbrunelliere.userlogin.Profile;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.firebase.client.AuthData;
-import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.gobelins.mbrunelliere.userlogin.MainActivity;
 import com.gobelins.mbrunelliere.userlogin.R;
-import com.gobelins.mbrunelliere.userlogin.UserActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

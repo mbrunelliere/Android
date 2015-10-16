@@ -43,12 +43,12 @@ public class UserActivity extends AppCompatActivity implements UserFragment.user
 
         UserFragment userFragment = new UserFragment();
 
-        setTitle("Profil utilisateur");
+        setTitle("Editer votre profil utilisateur");
 
         //instantiate Fragment
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.mainContainer, new UserFragment())
+                .add(R.id.mainContainer,userFragment)
                 .commit();
     }
 

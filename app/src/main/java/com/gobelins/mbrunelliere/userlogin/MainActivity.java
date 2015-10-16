@@ -1,6 +1,5 @@
 package com.gobelins.mbrunelliere.userlogin;
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -88,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
                             }
                         })
                         .show();
-                Intent chatActivity = new Intent(MainActivity.this, ChatActivity.class);
+                Intent chatActivity = new Intent(MainActivity.this, MessengerActivity.class);
                 chatActivity.putExtra("emailSession",emailSession);
                 chatActivity.putExtra("passwordSession",passwordSession);
                 startActivity(chatActivity);
