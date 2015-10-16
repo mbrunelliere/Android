@@ -1,6 +1,5 @@
 package com.gobelins.mbrunelliere.userlogin.User;
 
-
 import android.content.Context;
 import android.os.Bundle;
 

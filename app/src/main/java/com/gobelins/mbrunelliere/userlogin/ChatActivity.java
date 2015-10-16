@@ -10,19 +10,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.firebase.client.AuthData;
@@ -42,9 +36,6 @@ public class ChatActivity extends AppCompatActivity {
     private String passwordSession;
     private String emailSession;
     private LinearLayoutManager linearLayoutManager;
-
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
