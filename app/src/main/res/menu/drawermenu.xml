@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Messagerie instantanée"
+        android:id="@+id/nav_item_messenger"/>
+
+    <item android:title="Contacts"
+        android:id="@+id/nav_item_contacts"/>
+
+    <item android:title="Historique">
+        <menu>
+            <item
+                android:title="Messages reçus"
+                android:id="@+id/nav_item_received"/>
+            <item
+                android:title="Messages envoyés"
+                android:id="@+id/nav_item_sent"/>
+        </menu>
+    </item>
+
+    <group android:id="@+id/group_settings_id">
+        <item android:title="A propos"
+              android:id="@+id/nav_item_about"/>
+    </group>
+
+
+</menu>
