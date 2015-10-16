@@ -3,6 +3,7 @@ package com.gobelins.mbrunelliere.userlogin;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,14 +11,18 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.firebase.client.AuthData;
@@ -29,7 +34,7 @@ import com.gobelins.mbrunelliere.userlogin.Chat.MessageHolder;
 
 
 
-public class ChatActivity extends AppCompatActivity  {
+public class ChatActivity extends AppCompatActivity {
 
     private static final String TAG = "ChatActivity";
     private FirebaseRecyclerViewAdapter<Message, MessageHolder> adapter;
@@ -37,8 +42,9 @@ public class ChatActivity extends AppCompatActivity  {
     private String passwordSession;
     private String emailSession;
     private LinearLayoutManager linearLayoutManager;
-    private int oldNbrItems;
 
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +59,7 @@ public class ChatActivity extends AppCompatActivity  {
         passwordSession = getIntent().getStringExtra("passwordSession");
         emailSession = getIntent().getStringExtra("emailSession");
 
+        //Initialize RecyclerView
         Firebase.setAndroidContext(this);
         final Firebase ref = new Firebase("https://workshopandroid.firebaseio.com").child("messages");
         final AuthData authData = ref.getAuth();
@@ -63,17 +70,9 @@ public class ChatActivity extends AppCompatActivity  {
         final RecyclerView messages = (RecyclerView) findViewById(R.id.rvMessages);
 
         messages.setHasFixedSize(true);
-        messages.setLayoutManager(linearLayoutManager = new LinearLayoutManager(this));
+        linearLayoutManager = new LinearLayoutManager(this);
+        messages.setLayoutManager(linearLayoutManager);
 
-        messageEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId == EditorInfo.IME_NULL && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                    /*sendMessage();*/
-                }
-                return true;
-            }
-        });
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,6 +83,7 @@ public class ChatActivity extends AppCompatActivity  {
                         if (firebaseError != null) {
                             Log.e("FirebaseUI.chat", firebaseError.toString());
                         }
+                        messages.smoothScrollToPosition(adapter.getItemCount() - 1);
                     }
                 });
                 messageEdit.setText("");
@@ -94,7 +94,6 @@ public class ChatActivity extends AppCompatActivity  {
              @Override
              public void populateViewHolder(MessageHolder messageView, Message message) {
 
-                 oldNbrItems = adapter.getItemCount() - 1;
                  messageView.textView.setText(message.getMessage());
                  messageView.textView.setPadding(10, 0, 10, 0);
                  messageView.nameView.setText(message.getAuthor() + " : ");
@@ -107,21 +106,12 @@ public class ChatActivity extends AppCompatActivity  {
                  } else {
                      messageView.nameView.setTextColor(Color.parseColor("#00BCD4"));
                  }
-                // messages.smoothScrollToPosition(adapter.getItemCount() - 1);
+
              }
 
         };
 
         messages.setAdapter(adapter);
-        /*messages.setRecyclerListener(new RecyclerView.RecyclerListener() {
-            @Override
-            public void onViewRecycled(RecyclerView.ViewHolder holder) {
-                if( oldNbrItems == adapter.getItemCount() - 1 ) {
-                    messages.smoothScrollToPosition(adapter.getItemCount() - 1);
-                }
-            }
-        });
-        */
 
     }
 
