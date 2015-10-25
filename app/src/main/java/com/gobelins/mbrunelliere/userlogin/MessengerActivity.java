@@ -1,6 +1,8 @@
 package com.gobelins.mbrunelliere.userlogin;
 
 import android.content.Intent;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -11,8 +13,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.firebase.client.AuthData;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+import com.gobelins.mbrunelliere.userlogin.DrawerTabs.ReceivedFragment;
+import com.gobelins.mbrunelliere.userlogin.DrawerTabs.SentFragment;
 import com.gobelins.mbrunelliere.userlogin.DrawerTabs.TabFragment;
+import com.squareup.picasso.Picasso;
 
 public class MessengerActivity extends AppCompatActivity {
     DrawerLayout mDrawerLayout;
@@ -20,6 +32,9 @@ public class MessengerActivity extends AppCompatActivity {
     FragmentManager mFragmentManager;
     FragmentTransaction mFragmentTransaction;
     ImageButton mEditProfileButton;
+    TextView mMailUser;
+    TextView mNameUser;
+    ImageView mImageUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,16 +79,25 @@ public class MessengerActivity extends AppCompatActivity {
              public boolean onNavigationItemSelected(MenuItem menuItem) {
                 mDrawerLayout.closeDrawers();
 
-                 if (menuItem.getItemId() == R.id.nav_item_sent) {
-                     Intent userActivity = new Intent(MessengerActivity.this, UserActivity.class);
-                     startActivity(userActivity);
-                 }
-
                 if (menuItem.getItemId() == R.id.nav_item_messenger) {
                     FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
                     xfragmentTransaction.replace(R.id.containerView,new TabFragment()).commit();
                 }
+                 if (menuItem.getItemId() == R.id.nav_item_sent) {
+                     FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
+                     xfragmentTransaction.replace(R.id.containerView,new SentFragment()).commit();
+                 }
+                 if (menuItem.getItemId() == R.id.nav_item_received) {
+                     FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
+                     xfragmentTransaction.replace(R.id.containerView,new ReceivedFragment()).commit();
+                 }
 
+                 if (menuItem.getItemId() == R.id.nav_item_logout) {
+                     Firebase FirebaseRef = new Firebase("https://workshopandroid.firebaseio.com");
+                     FirebaseRef.unauth();
+                     Intent i = new Intent(MessengerActivity.this, MainActivity.class);
+                     startActivity(i);
+                 }
                  return false;
             }
 
@@ -91,6 +115,33 @@ public class MessengerActivity extends AppCompatActivity {
 
                 mDrawerToggle.syncState();
 
+        /**
+         *  Display current user information
+         * */
+        mImageUser = (ImageView) findViewById(R.id.userImage);
+        mNameUser = (TextView) findViewById(R.id.nameUser) ;
+        mMailUser = (TextView) findViewById(R.id.mailUser) ;
+
+        Firebase myFirebaseRef = new Firebase("https://workshopandroid.firebaseio.com");
+        AuthData authData = myFirebaseRef.getAuth();
+
+        String imageString = authData.getProviderData().get("profileImageURL").toString();
+        Picasso.with(this).load(imageString).into(mImageUser);
+
+        String emailString = authData.getProviderData().get("email").toString();
+        mMailUser.setText(emailString);
+
+        Firebase myCurrentUserRef = myFirebaseRef.child("users/" + authData.getUid());
+        myCurrentUserRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                mNameUser.setText(snapshot.child("name").getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(FirebaseError error) {
+            }
+        });
     }
 
     private void goToProfileEdition(View v) {

@@ -24,6 +24,7 @@ public class LoginFragment extends Fragment {
     private static final String TAG  = "LoginFrament";
     private LoginListener mListener;
 
+
     @Bind(R.id.loginMail)
     TextView mLoginMail;
     @Bind(R.id.loginPassword)
@@ -69,8 +70,14 @@ public class LoginFragment extends Fragment {
         mListener.onLoginClicked(mLoginMail.getText(), mLoginPassword.getText());
     }
 
+    @OnClick(R.id.registerUserButton)
+    void onClick() {
+        mListener.onRegisterActivityClicked();
+    }
+
     public interface LoginListener {
         void onLoginClicked(CharSequence login, CharSequence password);
+        void onRegisterActivityClicked();
 
     }
 

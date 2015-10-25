@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#648296"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -9,6 +10,7 @@
     tools:context="com.gobelins.mbrunelliere.userlogin.User.LoginFragment">
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
@@ -19,16 +21,21 @@
         android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/login.button" />
+        android:layout_alignEnd="@+id/view2"
+        android:layout_alignLeft="@+id/view2"
+        android:layout_alignRight="@+id/view2"
+        android:layout_alignStart="@+id/view2"
+        android:layout_centerVertical="true"
+        android:background="#55758a"
+        android:text="@string/login.button"
+        android:textColor="#ffffff" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/editText2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp">
 
         <EditText
             android:id="@+id/loginMail"
@@ -37,10 +44,12 @@
             android:ems="10"
             android:hint="@string/login.mail"
             android:inputType="textPersonName"
+            android:textColor="#ffffff"
             tools:text="Name" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/view2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/editText2"
@@ -56,7 +65,21 @@
             android:ems="10"
             android:hint="@string/login.password"
             android:inputType="textPassword"
+            android:textColor="#ffffff"
             tools:text="Password" />
     </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/registerUserButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/textView"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/textView"
+        android:background="#55758a"
+        android:text="Créer un compte"
+        android:textColor="#ffffff" />
 
 </RelativeLayout>

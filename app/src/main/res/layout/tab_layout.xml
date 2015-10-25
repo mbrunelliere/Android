@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:background="#648296"
     android:layout_height="wrap_content">
 
 
@@ -11,6 +12,7 @@
         android:id="@+id/tabs"
         app:tabGravity="fill"
         app:tabMode="fixed"
+        android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </android.support.design.widget.TabLayout>

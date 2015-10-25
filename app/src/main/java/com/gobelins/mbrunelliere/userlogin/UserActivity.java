@@ -1,14 +1,10 @@
 package com.gobelins.mbrunelliere.userlogin;
 
-import android.content.Intent;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
@@ -32,14 +28,13 @@ public class UserActivity extends AppCompatActivity implements UserFragment.user
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
+        setTitle("Editer votre profil utilisateur");
+
         passwordSession = getIntent().getStringExtra("passwordSession");
         emailSession = getIntent().getStringExtra("emailSession");
 
         Firebase.setAndroidContext(this);
         myFirebaseRef = new Firebase("https://workshopandroid.firebaseio.com");
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         UserFragment userFragment = new UserFragment();
 
@@ -97,31 +92,4 @@ public class UserActivity extends AppCompatActivity implements UserFragment.user
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.action_settings) {
-            //login clicked
-            return true;
-        }else if (item.getItemId() == R.id.actions_Profile) {
-            //profile clicked
-            Intent userActivity = new Intent(UserActivity.this, UserActivity.class);
-            startActivity(userActivity);
-            return true;
-        }else if (item.getItemId() == R.id.actions_Logout) {
-            //logout clicked
-
-            Firebase FirebaseRef = new Firebase("https://workshopandroid.firebaseio.com");
-            FirebaseRef.unauth();
-            Intent i = new Intent(UserActivity.this, MainActivity.class);
-            startActivity(i);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_chat, menu);
-        return true;
-    }
 }
