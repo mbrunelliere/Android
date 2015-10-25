@@ -19,6 +19,8 @@ import com.gobelins.mbrunelliere.userlogin.User.RegisterFragment;
 
 import java.util.Map;
 
+import butterknife.OnClick;
+
 public class MainActivity extends AppCompatActivity implements LoginFragment.LoginListener, RegisterFragment.RegisterListener {
 
     private static final String TAG = "MainActivity";
@@ -35,9 +37,6 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
         myFirebaseRef = new Firebase("https://workshopandroid.firebaseio.com");
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         LoginFragment loginFragment = new LoginFragment();
         RegisterFragment registerFragment = new RegisterFragment();
 
@@ -50,25 +49,6 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
                 .commit();
     }
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menuMainRegisterItem) {
-            //register clicked
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.mainContainer, new RegisterFragment())
-                    .commit();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
 
     @Override
     public void onLoginClicked(CharSequence loginText, CharSequence passwordText) {
@@ -99,6 +79,14 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
             }
         });
 
+    }
+
+    @Override
+    public void onRegisterActivityClicked() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.mainContainer, new RegisterFragment())
+                .commit();
     }
 
     @Override

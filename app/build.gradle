@@ -34,4 +34,9 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.+'
     compile 'com.scottyab:aes-crypto:0.0.3'
     compile 'com.firebaseui:firebase-ui:0.2.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.madgag.spongycastle:prov:1.53.0.0'
+    compile 'com.madgag.spongycastle:pkix:1.53.0.0'
+    compile 'com.madgag.spongycastle:pg:1.53.0.0'
+    compile 'com.madgag.spongycastle:core:1.53.0.0'
 }
